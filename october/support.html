@@ -1,0 +1,80 @@
+<!doctype HTML>
+<html>
+    <head>
+        <title>
+            Support
+        </title>
+    </head>
+    <body>
+        <h1>October for iOS</h1>
+        <h2>About</h2>
+        October is music editor for iOS using AVAudioEngine, modeled after NES sound capabilities. It can export to an AAC audio file, an .NSF (NES Sound Format) file, or an NES ROM file. It can also export to ASM6 code (.s), which can later be built into an NES ROM using the ASM6 assembler by Loopy, or by sharing the code to the NES IDE app for iOS.<br>
+        <h2>Songs</h2>
+        Songs can be a linear timeline of notes (note-based), or a linear timeline of loops (loop-based).<br>
+        <h2>Loops</h2>
+        A loop is a sequence of notes and noise events, exactly N measures long, where N is >= 1.  Loop-based songs can have up to 16 loops defined.<br>
+        <h2>Loop Instances</h2>
+        A loop instance is a loop that has been added to the timeline. Loop instances start at a given measure, and can be set to repeat a number of times, as long as the loop instance does not overlap with other loop instances on the timeline.<br>
+        <h2>Channels</h2>
+        4 channels are available: <br>
+        1. Square Wave 1<br>
+        2. Square Wave 2<br>
+        3. Triangle Wave<br>
+        4. Noise<br><br>
+        Each channel can only play one note (or noise event) at a time.<br>
+        <h3>Square Wave</h3>
+        <pre>__--__--__--__--</pre><br>
+        <b>Pitch</b><br>
+        Individual Square channel notes have a defined pitch A-G (with sharps and flats if needed) and octave 0-9.  The pitch affects the period length, or frequency, of the square wave.<br><br>
+        <b>Duty Cycle</b><br>
+        Square Channels have 4 Duty Cycle settings, that affect the timbre or voice of the square wave.  The duty cycle is the percentage of time for which the output is 1 during a wave period.  Individual square notes can optionally have their own duty cycle settings to override the channel duty cycle setting.<br>
+        <pre>_-_______-______</pre> 12.5%<br>
+        <pre>_--______--_____</pre> 25%<br>
+        <pre>_----____----___</pre> 50%<br>
+        <pre>_------__------_</pre> 75% (sounds the same as 25%)<br>
+        <h3>Triangle Wave</h3>
+        <pre>/\/\/\/\/\/\/\/\</pre><br>
+        <b>Pitch</b><br>
+        Individual Triangle channel notes have a defined pitch A-G (with sharps and flats if needed) and octave 0-9.  The pitch affects the period length, or frequency, of the triangle wave.<br>
+        <h3>Noise</h3>
+        <pre>_-__--___-_---_-</pre><br>
+        The noise wave resembles a square wave, but with an adjustable pseudorandom sequence of -1 and 1 output values.  It is often used for drums or sound effects.<br><br>
+        <b>Noise Preset</b><br>
+        Noise presets consist of a loop mode toggle, which controls whether the pseudorandom sequence of -1 and 1 output values is shortened, and one of 16 period values.  Effectively there are 32 different possible noise presets.  The Noise Channel has a configurable Noise Preset setting at the channel level.  Individual noise events can optionally have their own noise preset settings to override the channel noise preset setting.<br><br>
+        <b>Volume</b><br>
+        The noise channel has a configurable volume at the channel level.  Individual noise events can optionally have their own volume setting to override the channel volume.<br>
+        <h2>ASM6 Code Output</h2>
+        Music data is converted into an event array of event / value bytes. Events are 1 byte long, each have their own unique code with some associated data. Values are also 1 byte long, and they contain a period table lookup value used to reference a pitch value.<br>
+        The code will iterate through the event array, consuming event array items such as delays, channel setting changes, channel start events, channel stop events, etc. If a start channel event is encountered for a square or triangle channel, an additional item(s) from the array are consumed as needed to set the pitches of any channels started by the event.<br>
+        <h3>Event Byte Codes</h3>
+        <b>Delay Event</b><br>
+        <pre>1xxxxxxx</pre>
+        delay amount = last 7 bits, resulting in a number from 1-128, equal to the number of 1/60 second "ticks" to wait<br><br>
+        <b>Start Channel(s) Event</b><br>
+        <pre>0001cccc</pre>
+        bits 4-7 = channels 1-4<br>
+        For each square or triangle channel started, another event array item is also consumed. The additional array item(s) contain the channel pitch (or noise preset) data for the channel to be set to upon starting.<br><br>
+        <b>Stop Channel(s) Event</b><br>
+        <pre>0000cccc</pre>
+        bits 4-7 = channels 1-4<br><br>
+        <b>Square Wave Channel 1 Volume Change Event</b><br>
+        <pre>0010vvvv</pre>
+        bits 4-7 = volume 0-15<br><br>
+        <b>Square Wave Channel 2 Volume Change Event</b><br>
+        <pre>0011vvvv</pre>
+        bits 4-7 = volume 0-15<br><br>
+        <b>Noise Channel Volume Change Event</b><br>
+        <pre>0100vvvv</pre>
+        bits 4-7 = volume 0-15<br><br>
+        <b>Duty Cycle Change Event</b><br>
+        <pre>0101ddDD</pre>
+        dd = square channel 1 duty cycle bits<br>
+        DD = square channel 2 duty cycle bits<br><br>
+        <b>Noise Preset Change Event</b><br>
+        <pre>011LPPPP</pre>
+        L = loop mode on / off<br>
+        PPPP = period value<br>
+        <h2>Contact</h2>
+        If you have questions regarding the October app for iOS, please <a href="mailto:octoberchiptuneios@gmail.com?Subject=October iOS Support">email us</a>.<br><br>
+    </body>
+</html>
